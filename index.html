@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedAI - AI-Powered Medical Diagnosis</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #0073e6;
+            --primary-dark: #005cbf;
+            --secondary: #4caf50;
+            --light: #f8f9fa;
+            --dark: #333;
+            --danger: #e74c3c;
+            --success: #2ecc71;
+        }
+        
+        body {
+            background: linear-gradient(120deg, #e0f2ff 0%, #f5f9ff 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 1000px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 90vh;
+        }
+        
+        .header {
+            background: var(--primary);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 24px;
+            font-weight: 700;
+        }
+        
+        .logo i {
+            font-size: 32px;
+        }
+        
+        .nav {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        
+        .nav a:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .main-content {
+            display: flex;
+            flex: 1;
+        }
+        
+        .welcome-section {
+            flex: 1;
+            padding: 30px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%23f0f8ff"/><path d="M0 0 L100 100 M100 0 L0 100" stroke="%23e0f2ff" stroke-width="1"/></svg>');
+        }
+        
+        .welcome-section h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
+        
+        .welcome-section p {
+            color: var(--dark);
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .features {
+            display: flex;
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .feature {
+            background: var(--light);
+            padding: 20px;
+            border-radius: 8px;
+            flex: 1;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .feature i {
+            font-size: 36px;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        .auth-section {
+            width: 350px;
+            padding: 30px;
+            background: white;
+            border-left: 1px solid #eee;
+        }
+        
+        .form-container {
+            margin-top: 20px;
+        }
+        
+        .form-control {
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .form-control label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+        
+        .form-control input {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        .form-control input:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+        
+        .form-control i {
+            position: absolute;
+            right: 15px;
+            top: 45px;
+            color: #777;
+        }
+        
+        .form-control small {
+            display: block;
+            color: var(--danger);
+            margin-top: 5px;
+            visibility: hidden;
+        }
+        
+        .form-control.error small {
+            visibility: visible;
+        }
+        
+        .form-control.error input {
+            border-color: var(--danger);
+        }
+        
+        .form-control.success input {
+            border-color: var(--success);
+        }
+        
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 8px;
+            width: 100%;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .btn:hover {
+            background: var(--primary-dark);
+        }
+        
+        .btn-secondary {
+            background: var(--secondary);
+        }
+        
+        .btn-secondary:hover {
+            background: #3d8b40;
+        }
+        
+        .toggle-form {
+            text-align: center;
+            margin-top: 25px;
+            color: #555;
+        }
+        
+        .toggle-form a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        .toggle-form a:hover {
+            text-decoration: underline;
+        }
+        
+        .form {
+            display: none;
+        }
+        
+        .form.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .success-message {
+            background-color: var(--success);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            display: none;
+        }
+        
+        .ai-diagnosis {
+            display: none;
+            padding: 30px;
+        }
+        
+        .symptoms-input {
+            margin-bottom: 30px;
+        }
+        
+        .symptoms-input textarea {
+            width: 100%;
+            height: 150px;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            resize: vertical;
+        }
+        
+        .diagnosis-result {
+            background: var(--light);
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+            display: none;
+        }
+        
+        .diagnosis-result h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        .probability-meter {
+            height: 20px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+        
+        .probability-level {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 10px;
+            width: 0%;
+            transition: width 1s ease-in-out;
+        }
+        
+        .footer {
+            background: var(--primary);
+            color: white;
+            text-align: center;
+            padding: 15px;
+            font-size: 14px;
+        }
+        
+        @media (max-width: 900px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .auth-section {
+                width: 100%;
+                border-left: none;
+                border-top: 1px solid #eee;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <i class="fas fa-heartbeat"></i>
+                <span>MedAI</span>
+            </div>
+            <div class="nav">
+                <a href="#">Home</a>
+                <a href="#">About</a>
+                <a href="#">Services</a>
+                <a href="#">Contact</a>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <div class="welcome-section">
+                <h2>AI-Powered Medical Diagnosis</h2>
+                <p>Welcome to MedAI, your trusted platform for preliminary medical diagnosis using advanced artificial intelligence technology.</p>
+                <p>Our AI system analyzes your symptoms and provides insights into potential conditions, helping you make informed decisions about your health.</p>
+                
+                <div class="features">
+                    <div class="feature">
+                        <i class="fas fa-robot"></i>
+                        <h3>AI Diagnosis</h3>
+                        <p>Advanced algorithms analyze your symptoms</p>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-clock"></i>
+                        <h3>24/7 Availability</h3>
+                        <p>Get insights anytime, anywhere</p>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-shield-alt"></i>
+                        <h3>Secure & Private</h3>
+                        <p>Your health data is protected</p>
+                    </div>
+                </div>
+                
+                <div class="ai-diagnosis" id="ai-diagnosis">
+                    <h2>Symptom Checker</h2>
+                    <p>Describe your symptoms in detail below. Our AI will analyze your input and provide potential conditions.</p>
+                    
+                    <div class="symptoms-input">
+                        <textarea id="symptoms-text" placeholder="Describe your symptoms in detail. For example: 'I have had a fever and headache for the past two days, along with muscle pain and fatigue.'"></textarea>
+                        <button class="btn btn-secondary" onclick="analyzeSymptoms()" style="margin-top: 15px;">
+                            <i class="fas fa-search"></i> Analyze Symptoms
+                        </button>
+                    </div>
+                    
+                    <div class="diagnosis-result" id="diagnosis-result">
+                        <h3>Possible Conditions</h3>
+                        <div id="conditions-list">
+                            <!-- Conditions will be added here by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="auth-section">
+                <div id="success-message" class="success-message"></div>
+                
+                <form id="login-form" class="form active">
+                    <h2>Login to Your Account</h2>
+                    <div class="form-control">
+                        <label for="login-email">Email</label>
+                        <input type="email" id="login-email" placeholder="Enter your email">
+                        <i class="fas fa-envelope"></i>
+                        <small>Error message</small>
+                    </div>
+                    <div class="form-control">
+                        <label for="login-password">Password</label>
+                        <input type="password" id="login-password" placeholder="Enter your password">
+                        <i class="fas fa-lock"></i>
+                        <small>Error message</small>
+                    </div>
+                    <button type="submit" class="btn">Login</button>
+                    <div class="toggle-form">
+                        Don't have an account? <a id="link-to-register">Register</a>
+                    </div>
+                </form>
+                
+                <form id="register-form" class="form">
+                    <h2>Create an Account</h2>
+                    <div class="form-control">
+                        <label for="register-name">Full Name</label>
+                        <input type="text" id="register-name" placeholder="Enter your full name">
+                        <i class="fas fa-user"></i>
+                        <small>Error message</small>
+                    </div>
+                    <div class="form-control">
+                        <label for="register-email">Email</label>
+                        <input type="email" id="register-email" placeholder="Enter your email">
+                        <i class="fas fa-envelope"></i>
+                        <small>Error message</small>
+                    </div>
+                    <div class="form-control">
+                        <label for="register-password">Password</label>
+                        <input type="password" id="register-password" placeholder="Create a password">
+                        <i class="fas fa-lock"></i>
+                        <small>Error message</small>
+                    </div>
+                    <div class="form-control">
+                        <label for="register-password2">Confirm Password</label>
+                        <input type="password" id="register-password2" placeholder="Confirm your password">
+                        <i class="fas fa-lock"></i>
+                        <small>Error message</small>
+                    </div>
+                    <button type="submit" class="btn">Create Account</button>
+                    <div class="toggle-form">
+                        Already have an account? <a id="link-to-login">Login</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>&copy; 2023 MedAI. All rights reserved. This service does not replace professional medical advice.</p>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const loginForm = document.getElementById('login-form');
+        const registerForm = document.getElementById('register-form');
+        const linkToRegister = document.getElementById('link-to-register');
+        const linkToLogin = document.getElementById('link-to-login');
+        const successMessage = document.getElementById('success-message');
+        const aiDiagnosisSection = document.getElementById('ai-diagnosis');
+        const diagnosisResult = document.getElementById('diagnosis-result');
+        
+        // Show register form
+        linkToRegister.addEventListener('click', () => {
+            loginForm.classList.remove('active');
+            registerForm.classList.add('active');
+            successMessage.style.display = 'none';
+        });
+        
+        // Show login form
+        linkToLogin.addEventListener('click', () => {
+            registerForm.classList.remove('active');
+            loginForm.classList.add('active');
+            successMessage.style.display = 'none';
+        });
+        
+        // Form validation for registration
+        registerForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const name = document.getElementById('register-name');
+            const email = document.getElementById('register-email');
+            const password = document.getElementById('register-password');
+            const password2 = document.getElementById('register-password2');
+            
+            validateRegisterForm(name, email, password, password2);
+            
+            // If all fields are valid, register the user
+            if (checkRegisterInputs(name, email, password, password2)) {
+                registerUser(name.value, email.value, password.value);
+            }
+        });
+        
+        // Form validation for login
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('login-email');
+            const password = document.getElementById('login-password');
+            
+            validateLoginForm(email, password);
+            
+            // If fields are valid, login the user
+            if (checkLoginInputs(email, password)) {
+                loginUser(email.value, password.value);
+            }
+        });
+        
+        // Validation functions
+        function validateRegisterForm(name, email, password, password2) {
+            // Name validation
+            if (name.value.trim() === '') {
+                setErrorFor(name, 'Name cannot be blank');
+            } else {
+                setSuccessFor(name);
+            }
+            
+            // Email validation
+            if (email.value.trim() === '') {
+                setErrorFor(email, 'Email cannot be blank');
+            } else if (!isValidEmail(email.value.trim())) {
+                setErrorFor(email, 'Email is not valid');
+            } else {
+                setSuccessFor(email);
+            }
+            
+            // Password validation
+            if (password.value.trim() === '') {
+                setErrorFor(password, 'Password cannot be blank');
+            } else if (password.value.trim().length < 6) {
+                setErrorFor(password, 'Password must be at least 6 characters');
+            } else {
+                setSuccessFor(password);
+            }
+            
+            // Confirm password validation
+            if (password2.value.trim() === '') {
+                setErrorFor(password2, 'Please confirm your password');
+            } else if (password.value !== password2.value) {
+                setErrorFor(password2, 'Passwords do not match');
+            } else {
+                setSuccessFor(password2);
+            }
+        }
+        
+        function validateLoginForm(email, password) {
+            // Email validation
+            if (email.value.trim() === '') {
+                setErrorFor(email, 'Email cannot be blank');
+            } else if (!isValidEmail(email.value.trim())) {
+                setErrorFor(email, 'Email is not valid');
+            } else {
+                setSuccessFor(email);
+            }
+            
+            // Password validation
+            if (password.value.trim() === '') {
+                setErrorFor(password, 'Password cannot be blank');
+            } else {
+                setSuccessFor(password);
+            }
+        }
+        
+        function setErrorFor(input, message) {
+            const formControl = input.parentElement;
+            const small = formControl.querySelector('small');
+            
+            small.innerText = message;
+            formControl.className = 'form-control error';
+        }
+        
+        function setSuccessFor(input) {
+            const formControl = input.parentElement;
+            formControl.className = 'form-control success';
+        }
+        
+        function isValidEmail(email) {
+            const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return re.test(String(email).toLowerCase());
+        }
+        
+        function checkRegisterInputs(name, email, password, password2) {
+            let isValid = true;
+            
+            if (name.value.trim() === '' || 
+                email.value.trim() === '' || 
+                password.value.trim() === '' || 
+                password2.value.trim() === '' ||
+                password.value !== password2.value) {
+                isValid = false;
+            }
+            
+            return isValid;
+        }
+        
+        function checkLoginInputs(email, password) {
+            let isValid = true;
+            
+            if (email.value.trim() === '' || password.value.trim() === '') {
+                isValid = false;
+            }
+            
+            return isValid;
+        }
+        
+        // User registration and login simulation
+        function registerUser(name, email, password) {
+            const user = {
+                name,
+                email,
+                password
+            };
+            
+            // In a real application, you would send this data to a server
+            localStorage.setItem('user', JSON.stringify(user));
+            
+            // Show success message
+            successMessage.style.display = 'block';
+            successMessage.textContent = 'Account created successfully! You can now login.';
+            
+            // Clear form and switch to login
+            registerForm.reset();
+            setTimeout(() => {
+                registerForm.classList.remove('active');
+                loginForm.classList.add('active');
+            }, 2000);
+        }
+        
+        function loginUser(email, password) {
+            // In a real application, you would verify credentials with a server
+            const storedUser = JSON.parse(localStorage.getItem('user'));
+            
+            if (storedUser && storedUser.email === email && storedUser.password === password) {
+                // Show AI diagnosis section
+                aiDiagnosisSection.style.display = 'block';
+                loginForm.classList.remove('active');
+                registerForm.classList.remove('active');
+                successMessage.style.display = 'block';
+                successMessage.textContent = 'Login successful! Welcome back.';
+            } else {
+                setErrorFor(document.getElementById('login-password'), 'Invalid email or password');
+            }
+        }
+        
+        // AI Symptom Analysis Function
+        function analyzeSymptoms() {
+            const symptomsText = document.getElementById('symptoms-text').value;
+            
+            if (symptomsText.trim() === '') {
+                alert('Please describe your symptoms');
+                return;
+            }
+            
+            // Show loading state
+            diagnosisResult.style.display = 'block';
+            document.getElementById('conditions-list').innerHTML = '<p>Analyzing your symptoms...</p>';
+            
+            // Simulate AI processing time
+            setTimeout(() => {
+                // This is a simplified simulation - a real implementation would use a medical API
+                const conditions = generateConditions(symptomsText);
+                
+                let html = '';
+                conditions.forEach(condition => {
+                    html += `
+                        <div class="condition">
+                            <h4>${condition.name} (${condition.probability}% probability)</h4>
+                            <div class="probability-meter">
+                                <div class="probability-level" style="width: ${condition.probability}%"></div>
+                            </div>
+                            <p>${condition.description}</p>
+                            <p><strong>Recommended action:</strong> ${condition.action}</p>
+                        </div>
+                        <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;">
+                    `;
+                });
+                
+                document.getElementById('conditions-list').innerHTML = html;
+                
+                // Animate probability meters
+                setTimeout(() => {
+                    const meters = document.querySelectorAll('.probability-level');
+                    meters.forEach(meter => {
+                        const width = meter.style.width;
+                        meter.style.width = '0';
+                        setTimeout(() => {
+                            meter.style.width = width;
+                        }, 100);
+                    });
+                }, 100);
+            }, 2000);
+        }
+        
+        // Simulated condition generator based on symptoms
+        function generateConditions(symptoms) {
+            symptoms = symptoms.toLowerCase();
+            const conditions = [];
+            
+            if (symptoms.includes('fever') && symptoms.includes('cough') && symptoms.includes('breath')) {
+                conditions.push({
+                    name: 'Respiratory Infection',
+                    probability: 75,
+                    description: 'A common infection affecting the respiratory system, possibly bronchitis or pneumonia.',
+                    action: 'Rest, hydrate, and consult a doctor if symptoms persist for more than 3 days.'
+                });
+            }
+            
+            if (symptoms.includes('headache') && (symptoms.includes('light') || symptoms.includes('sound'))) {
+                conditions.push({
+                    name: 'Migraine',
+                    probability: 65,
+                    description: 'A neurological condition characterized by intense headaches often accompanied by sensitivity to light and sound.',
+                    action: 'Rest in a dark room, stay hydrated, and consider over-the-counter pain relief. Consult a doctor for persistent migraines.'
+                });
+            }
+            
+            if (symptoms.includes('stomach') || symptoms.includes('nausea') || symptoms.includes('vomit')) {
+                conditions.push({
+                    name: 'Gastrointestinal Issue',
+                    probability: 60,
+                    description: 'Possible food poisoning, viral infection, or other digestive system disturbance.',
+                    action: 'Stay hydrated with electrolyte solutions, eat bland foods, and consult a doctor if symptoms persist beyond 48 hours.'
+                });
+            }
+            
+            if (symptoms.includes('rash') || symptoms.includes('itch') || symptoms.includes('redness')) {
+                conditions.push({
+                    name: 'Allergic Reaction or Skin Condition',
+                    probability: 55,
+                    description: 'Possible allergic reaction, contact dermatitis, or other skin condition.',
+                    action: 'Avoid potential allergens, use over-the-counter antihistamines, and consult a dermatologist if condition persists.'
+                });
+            }
+            
+            // Default condition if no specific matches
+            if (conditions.length === 0) {
+                conditions.push({
+                    name: 'General Viral Infection',
+                    probability: 50,
+                    description: 'Based on your symptoms, you may be experiencing a common viral infection.',
+                    action: 'Rest, stay hydrated, and monitor your symptoms. Consult a healthcare professional if symptoms worsen or persist.'
+                });
+            }
+            
+            return conditions;
+        }
+    </script>
+</body>
+</html>
